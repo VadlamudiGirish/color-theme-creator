@@ -2,12 +2,14 @@ import ColorInput from "../ColorInput/ColorInput";
 import "./ColorForm.css";
 import { uid } from "uid";
 
-export default function ColorForm({ onSubmitColor }) {
-  const defaultFormData = {
+export default function ColorForm({ onSubmitColor, currentColor }) {
+  let defaultFormData = {
     role: "some color",
     hex: "#123456",
     contrastText: "#ffffff",
   };
+
+  defaultFormData = currentColor || defaultFormData;
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -15,7 +17,9 @@ export default function ColorForm({ onSubmitColor }) {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    onSubmitColor({ ...data, id: uid() });
+    currentColor
+      ? onSubmitColor({ ...data, id: currentColor.id })
+      : onSubmitColor({ ...data, id: uid() });
 
     event.target.reset();
     event.target.role.focus();
@@ -43,7 +47,7 @@ export default function ColorForm({ onSubmitColor }) {
           defaultValue={defaultFormData.contrastText}
         />
       </label>
-      <button>ADD COLOR</button>
+      <button>{!currentColor ? "ADD COLOR" : "UPDATE COLOR"}</button>
     </form>
   );
 }
