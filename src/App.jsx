@@ -2,10 +2,12 @@ import { initialColors } from "./lib/colors";
 import ColorForm from "./Components/ColorForm/ColorForm";
 import Color from "./Components/Color/Color";
 import "./App.css";
-import { useState } from "react";
+import useLocalStorageState from "use-local-storage-state";
 
 function App() {
-  const [colors, setColors] = useState(initialColors);
+  const [colors, setColors] = useLocalStorageState("colors", {
+    defaultValue: initialColors,
+  });
 
   function handleCreateColor(newColor) {
     setColors([newColor, ...colors]);
