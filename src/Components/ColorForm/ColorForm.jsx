@@ -1,15 +1,24 @@
 import ColorInput from "../ColorInput/ColorInput";
 import "./ColorForm.css";
+import { uid } from "uid";
 
-export default function ColorForm({
-  onSubmitColor,
-  initialData = { role: "some color", hex: "#123456", contrastText: "#ffffff" },
-}) {
+export default function ColorForm({ onSubmitColor }) {
+  const defaultFormData = {
+    role: "some color",
+    hex: "#123456",
+    contrastText: "#ffffff",
+  };
+
   function handleSubmit(event) {
     event.preventDefault();
+
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
-    onSubmitColor(data);
+
+    onSubmitColor({ ...data, id: uid() });
+
+    event.target.reset();
+    event.target.role.focus();
   }
 
   return (
@@ -20,16 +29,19 @@ export default function ColorForm({
           type="text"
           id="role"
           name="role"
-          defaultValue={initialData.role}
+          defaultValue={defaultFormData.role}
         />
       </label>
       <label htmlFor="hex">
         <span>Hex</span>
-        <ColorInput id="hex" defaultValue={initialData.hex} />
+        <ColorInput id="hex" defaultValue={defaultFormData.hex} />
       </label>
       <label htmlFor="contrastText">
         <span>Contrast Text</span>
-        <ColorInput id="contrastText" defaultValue={initialData.contrastText} />
+        <ColorInput
+          id="contrastText"
+          defaultValue={defaultFormData.contrastText}
+        />
       </label>
       <button>ADD COLOR</button>
     </form>
