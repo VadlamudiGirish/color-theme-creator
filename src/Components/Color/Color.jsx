@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Color.css";
 import ColorForm from "../ColorForm/ColorForm";
+import CopyToClipboard from "../CopyToClipboard/CopyToClipboard";
 
 export default function Color({ color, onDelete, onUpdate }) {
   const [confirmMessage, setConfirmMessage] = useState(false);
@@ -24,6 +25,7 @@ export default function Color({ color, onDelete, onUpdate }) {
       }}
     >
       <h3 className="color-card-hightlight">{color.hex}</h3>
+      <CopyToClipboard color={color} />
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
 
@@ -33,13 +35,13 @@ export default function Color({ color, onDelete, onUpdate }) {
             <p>Really delete?</p>
             <button
               onClick={handleColorDelete}
-              style={{ backgroundColor: color.contrastText, color: color.hex }}
+              style={{ color: color.hex, margin: "5px" }}
             >
               Yes
             </button>
             <button
               onClick={() => setConfirmMessage(false)}
-              style={{ backgroundColor: color.contrastText, color: color.hex }}
+              style={{ color: color.hex, margin: "5px" }}
             >
               No
             </button>
@@ -57,10 +59,7 @@ export default function Color({ color, onDelete, onUpdate }) {
                 setEditMode(false);
                 setConfirmMessage(true);
               }}
-              className="color-card-hightlight"
-              style={{
-                border: editMode ? `2px solid ${color.contrastText}` : "none",
-              }}
+              style={{ color: color.hex }}
             >
               Delete
             </button>
@@ -69,12 +68,7 @@ export default function Color({ color, onDelete, onUpdate }) {
                 setConfirmMessage(false);
                 setEditMode(true);
               }}
-              className="color-card-hightlight"
-              style={{
-                border: confirmMessage
-                  ? `2px solid ${color.contrastText}`
-                  : "none",
-              }}
+              style={{ color: color.hex }}
             >
               Edit
             </button>
