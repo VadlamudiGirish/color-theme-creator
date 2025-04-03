@@ -36,22 +36,18 @@ function App() {
   );
 
   function handleCreateColor(newColor) {
-    // Add new color to global list
     setColors([newColor, ...colors]);
 
-    // Add color to current theme if it's not default
-    if (!selectedTheme.isDefault) {
-      const updatedThemes = themes.map((theme) =>
-        theme.id === selectedTheme.id
-          ? { ...theme, colors: [...theme.colors, newColor.id] }
-          : theme
-      );
-      setThemes(updatedThemes);
-      setSelectedTheme((prev) => ({
-        ...prev,
-        colors: [...prev.colors, newColor.id],
-      }));
-    }
+    const updatedThemes = themes.map((theme) =>
+      theme.id === selectedTheme.id
+        ? { ...theme, colors: [...theme.colors, newColor.id] }
+        : theme
+    );
+    setThemes(updatedThemes);
+    setSelectedTheme((prev) => ({
+      ...prev,
+      colors: [...prev.colors, newColor.id],
+    }));
 
     checkContrast(newColor);
   }
