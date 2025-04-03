@@ -3,6 +3,7 @@ import ColorForm from "./Components/ColorForm/ColorForm";
 import Color from "./Components/Color/Color";
 import "./App.css";
 import useLocalStorageState from "use-local-storage-state";
+import { useEffect } from "react";
 
 function App() {
   const [colors, setColors] = useLocalStorageState("colors", {
@@ -11,6 +12,7 @@ function App() {
 
   function handleCreateColor(newColor) {
     setColors([newColor, ...colors]);
+    checkContrast(newColor);
   }
 
   function handleDeleteColor(colorId) {
@@ -23,7 +25,44 @@ function App() {
         color.id === updatedColor.id ? { ...color, ...updatedColor } : color
       )
     );
+    checkContrast(updatedColor);
   }
+
+  async function checkContrast(color) {
+    try {
+      const response = await fetch(
+        "https://www.aremycolorsaccessible.com/api/are-they",
+        {
+          mode: "cors",
+          method: "POST",
+          body: JSON.stringify({
+            colors: [color.hex, color.contrastText],
+          }),
+        }
+      );
+
+      const { overall } = await response.json();
+
+      setColors((prevColors) =>
+        prevColors.map((c) =>
+          c.id === color.id ? { ...c, accessibility: overall } : c
+        )
+      );
+    } catch (error) {
+      console.error("Contrast check failed:", error);
+      setColors((prevColors) =>
+        prevColors.map((c) =>
+          c.id === color.id ? { ...c, accessibility: "Error checking" } : c
+        )
+      );
+    }
+  }
+
+  useEffect(() => {
+    colors.forEach((color) => {
+      if (!color.accessibility) checkContrast(color);
+    });
+  });
 
   return (
     <>

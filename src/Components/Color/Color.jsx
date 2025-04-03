@@ -28,7 +28,13 @@ export default function Color({ color, onDelete, onUpdate }) {
       <CopyToClipboard color={color} />
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
-
+      <div
+        style={{
+          display: "inline",
+        }}
+      >
+        Overall Contrast Score: {color.accessibility}
+      </div>
       <div className="action-container">
         {confirmMessage ? (
           <div className="color-card-highlight">
