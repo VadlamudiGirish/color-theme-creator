@@ -5,6 +5,7 @@ import ThemeForm from "./Components/ThemeForm/ThemeForm";
 import ColorForm from "./Components/ColorForm/ColorForm";
 import Color from "./Components/Color/Color";
 import "./App.css";
+import { uid } from "uid";
 
 function App() {
   const [themes, setThemes] = useLocalStorageState("themes", {
@@ -81,7 +82,7 @@ function App() {
 
   function handleCreateTheme(name) {
     const newTheme = {
-      id: `t${Date.now()}`,
+      id: uid(),
       name,
       colors: [],
       isDefault: false,
