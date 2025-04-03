@@ -1,18 +1,69 @@
-import { initialColors } from "./lib/colors";
+import { initialColors, initialThemes } from "./lib/colors";
+import useLocalStorageState from "use-local-storage-state";
+import { useEffect, useState } from "react";
+import ThemeForm from "./Components/ThemeForm/ThemeForm";
 import ColorForm from "./Components/ColorForm/ColorForm";
 import Color from "./Components/Color/Color";
 import "./App.css";
-import useLocalStorageState from "use-local-storage-state";
-import { useEffect } from "react";
 
 function App() {
+  const [themes, setThemes] = useLocalStorageState("themes", {
+    defaultValue: initialThemes.map((theme) => ({
+      ...theme,
+      isDefault: theme.id === "t1",
+    })),
+  });
+
   const [colors, setColors] = useLocalStorageState("colors", {
     defaultValue: initialColors,
   });
 
+  const [selectedTheme, setSelectedTheme] = useState(() => {
+    const defaultTheme = themes.find((t) => t.isDefault);
+    return defaultTheme || themes[0];
+  });
+
+  useEffect(() => {
+    if (!selectedTheme && themes.length > 0) {
+      const defaultTheme = themes.find((t) => t.isDefault) || themes[0];
+      setSelectedTheme(defaultTheme);
+    }
+  }, [themes, selectedTheme]);
+
+  const themeColors = colors.filter((color) =>
+    selectedTheme?.colors?.includes(color.id)
+  );
+
   function handleCreateColor(newColor) {
+    // Add new color to global list
     setColors([newColor, ...colors]);
+
+    // Add color to current theme if it's not default
+    if (!selectedTheme.isDefault) {
+      const updatedThemes = themes.map((theme) =>
+        theme.id === selectedTheme.id
+          ? { ...theme, colors: [...theme.colors, newColor.id] }
+          : theme
+      );
+      setThemes(updatedThemes);
+      setSelectedTheme((prev) => ({
+        ...prev,
+        colors: [...prev.colors, newColor.id],
+      }));
+    }
+
     checkContrast(newColor);
+  }
+
+  function handleDeleteTheme(themeId) {
+    const themeToDelete = themes.find((t) => t.id === themeId);
+    // Prevent deleting default theme
+    if (themeToDelete?.isDefault) return;
+
+    setThemes(themes.filter((theme) => theme.id !== themeId));
+    if (selectedTheme?.id === themeId) {
+      setSelectedTheme(themes.find((t) => t.isDefault) || themes[0]);
+    }
   }
 
   function handleDeleteColor(colorId) {
@@ -26,6 +77,27 @@ function App() {
       )
     );
     checkContrast(updatedColor);
+  }
+
+  function handleCreateTheme(name) {
+    const newTheme = {
+      id: `t${Date.now()}`,
+      name,
+      colors: [],
+      isDefault: false,
+    };
+    setThemes([...themes, newTheme]);
+    setSelectedTheme(newTheme);
+  }
+
+  function handleUpdateTheme(themeId, newName) {
+    if (themes.find((t) => t.id === themeId)?.isDefault) return;
+    setThemes(
+      themes.map((theme) =>
+        theme.id === themeId ? { ...theme, name: newName } : theme
+      )
+    );
+    setSelectedTheme((prev) => ({ ...prev, name: newName }));
   }
 
   async function checkContrast(color) {
@@ -67,20 +139,30 @@ function App() {
   return (
     <>
       <h1 className="text">Theme Creator</h1>
+      <ThemeForm
+        themes={themes}
+        onCreateTheme={handleCreateTheme}
+        onDeleteTheme={handleDeleteTheme}
+        onUpdateTheme={handleUpdateTheme}
+        selectedTheme={selectedTheme}
+        setSelectedTheme={setSelectedTheme}
+      />
+
       <ColorForm onSubmitColor={handleCreateColor} />
-      {colors.length === 0 ? (
-        <p className="text">No colors left! Start adding new colors 🌈</p>
+
+      {themeColors.length === 0 ? (
+        <p className="text">
+          No colors in this theme! Start adding new colors 🌈
+        </p>
       ) : (
-        colors.map((color) => {
-          return (
-            <Color
-              key={color.id}
-              color={color}
-              onDelete={handleDeleteColor}
-              onUpdate={handleUpdateColor}
-            />
-          );
-        })
+        themeColors.map((color) => (
+          <Color
+            key={color.id}
+            color={color}
+            onDelete={handleDeleteColor}
+            onUpdate={handleUpdateColor}
+          />
+        ))
       )}
     </>
   );
