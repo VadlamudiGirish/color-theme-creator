@@ -30,9 +30,7 @@ function App() {
       <h1 className="text">Theme Creator</h1>
       <ColorForm onSubmitColor={handleCreateColor} />
       {colors.length === 0 ? (
-        <p className="text" style={{ alignSelf: "center" }}>
-          No colors left! Start adding new colors 🌈
-        </p>
+        <p className="text">No colors left! Start adding new colors 🌈</p>
       ) : (
         colors.map((color) => {
           return (
