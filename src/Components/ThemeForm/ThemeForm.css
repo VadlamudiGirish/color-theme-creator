@@ -1,0 +1,82 @@
+.theme-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.theme-form label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.theme-form label > span {
+  flex: 0 0 120px;
+  font-weight: 500;
+  color: #333;
+}
+
+.theme-form input[type="text"],
+.theme-form select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.theme-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.theme-creator,
+.theme-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.theme-form button {
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-form button[type="submit"] {
+  background-color: #2196f3;
+}
+
+.theme-form button:hover {
+  background-color: #45a049;
+}
+
+.theme-form button[type="submit"]:hover {
+  background-color: #1976d2;
+}
+
+.theme-form button[type="button"]:last-child {
+  background-color: #f44336;
+}
+
+.theme-form button[type="button"]:last-child:hover {
+  background-color: #d32f2f;
+}
