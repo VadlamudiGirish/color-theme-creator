@@ -16,6 +16,14 @@ export default function Color({ color, onDelete, onUpdate }) {
     onDelete(color.id);
   }
 
+  function invertHex(hex) {
+    hex = hex.replace(/^#/, "");
+    hex = hex.length === 3 ? hex.replace(/./g, "$&$&") : hex;
+    const num = parseInt(hex, 16);
+    const inverted = (num ^ 0xffffff) & 0xffffff;
+    return `#${inverted.toString(16).padStart(6, "0").toUpperCase()}`;
+  }
+
   return (
     <div
       className="color-card"
@@ -28,7 +36,13 @@ export default function Color({ color, onDelete, onUpdate }) {
       <CopyToClipboard color={color} />
       <h4>{color.role}</h4>
       <p>contrast: {color.contrastText}</p>
-      <div style={{ display: "inline" }}>
+      <div
+        style={{
+          display: "inline",
+          color: color.hex,
+          backgroundColor: invertHex(color.hex),
+        }}
+      >
         Overall Contrast Score: {color.accessibility}
       </div>
       <div className="action-container">
