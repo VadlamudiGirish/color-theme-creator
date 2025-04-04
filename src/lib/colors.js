@@ -2,12 +2,12 @@ export const initialThemes = [
   {
     id: "t1",
     name: "Theme",
-    colors: ["c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9"],
+    colors: ["c1", "c2", "c3", "c4", "c5", "c6"],
   },
   {
     id: "t2",
     name: "2nd Theme",
-    colors: ["c3", "c2", "c8"],
+    colors: ["c7", "c8", "c9"],
   },
 ];
 

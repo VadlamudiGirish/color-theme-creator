@@ -54,11 +54,23 @@ function App() {
 
   function handleDeleteTheme(themeId) {
     const themeToDelete = themes.find((t) => t.id === themeId);
+
     if (themeToDelete?.isDefault) return;
 
-    setThemes(themes.filter((theme) => theme.id !== themeId));
+    const colorsToDelete = themeToDelete.colors;
+
+    const updatedThemes = themes.filter((theme) => theme.id !== themeId);
+
+    setThemes(updatedThemes);
+
+    setColors((prevColors) =>
+      prevColors.filter((color) => !colorsToDelete.includes(color.id))
+    );
+
     if (selectedTheme?.id === themeId) {
-      setSelectedTheme(themes.find((t) => t.isDefault) || themes[0]);
+      const defaultTheme =
+        updatedThemes.find((t) => t.isDefault) || updatedThemes[0];
+      setSelectedTheme(defaultTheme);
     }
   }
 
