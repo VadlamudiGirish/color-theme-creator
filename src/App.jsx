@@ -54,7 +54,6 @@ function App() {
 
   function handleDeleteTheme(themeId) {
     const themeToDelete = themes.find((t) => t.id === themeId);
-    // Prevent deleting default theme
     if (themeToDelete?.isDefault) return;
 
     setThemes(themes.filter((theme) => theme.id !== themeId));
