@@ -157,21 +157,30 @@ function App() {
       />
 
       <ColorForm onSubmitColor={handleCreateColor} />
-
-      {themeColors.length === 0 ? (
-        <p className="text">
-          No colors in this theme! Start adding new colors 🌈
-        </p>
-      ) : (
-        themeColors.map((color) => (
-          <Color
-            key={color.id}
-            color={color}
-            onDelete={handleDeleteColor}
-            onUpdate={handleUpdateColor}
-          />
-        ))
-      )}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        {themeColors.length === 0 ? (
+          <p className="text">
+            No colors in this theme! Start adding new colors 🌈
+          </p>
+        ) : (
+          themeColors.map((color) => (
+            <div className="color-container" key={color.id}>
+              <Color
+                key={color.id}
+                color={color}
+                onDelete={handleDeleteColor}
+                onUpdate={handleUpdateColor}
+              />
+            </div>
+          ))
+        )}
+      </div>
     </>
   );
 }
